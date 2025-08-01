@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Result, Value};
+use serde_json::Value;
 use std::collections::HashMap;
 use std::path::PathBuf;
+use walkdir::{DirEntry, Error, WalkDir};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct GraphData {
@@ -31,6 +32,58 @@ struct MarkdownNode {
     group: Option<String>,
 }
 
+fn get_md_files(input: String) -> Vec<Result<DirEntry, Error>> {
+    let files: Vec<Result<DirEntry, Error>> = WalkDir::new(input)
+        .into_iter()
+        .filter(|e| {
+            return e.as_ref().map_or(false, |f| {
+                f.file_name()
+                    .to_str()
+                    .map(|s| s.ends_with(".md") || s.ends_with(".markdown"))
+                    .unwrap_or(false)
+            });
+        })
+        .collect();
+
+    return files;
+}
+
+fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
+    let mut node_vector: Vec<MarkdownNode> = Vec::new();
+    let mut title;
+    let mut id;
+    let mut path;
+    let mut tags;
+    let mut links;
+    let group = None;
+
+    for entry in input {
+        for md_wrapped in get_md_files(entry) {
+            if let Ok(md) = md_wrapped {
+                title = "placeholder".to_string();
+                id = "001".to_string();
+                path = md.path().to_path_buf();
+                tags = vec!["tag1".to_string()];
+                links = vec![];
+                node_vector.push(MarkdownNode {
+                    title,
+                    id,
+                    path,
+                    tags,
+                    links,
+                    group: group.clone(),
+                });
+            } else {
+                println!("There was an error or no markdown files were found");
+            }
+        }
+    }
+
+    return node_vector;
+}
+
 pub fn print_json(verbose: bool, input: Vec<String>) -> std::io::Result<String> {
+    let node_vector = parse_md_files(verbose, input);
+    println!("{:?}", node_vector);
     Ok("tmp".to_string())
 }
