@@ -55,7 +55,6 @@ fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
     let mut path;
     let mut tags;
     let mut links;
-    let group = None;
 
     for entry in input {
         for md_wrapped in get_md_files(entry) {
@@ -71,10 +70,10 @@ fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
                     path,
                     tags,
                     links,
-                    group: group.clone(),
+                    group: None,
                 });
             } else {
-                println!("There was an error or no markdown files were found");
+                println!("There was an error getting the markdown files");
             }
         }
     }
