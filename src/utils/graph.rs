@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use walkdir::{DirEntry, Error, WalkDir};
 
+use crate::utils::markdown_utils;
+
 #[derive(Serialize, Deserialize, Debug)]
 struct GraphData {
     nodes: Vec<MarkdownNode>,
@@ -50,11 +52,7 @@ fn get_md_files(input: String) -> Vec<Result<DirEntry, Error>> {
 
 fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
     let mut node_vector: Vec<MarkdownNode> = Vec::new();
-    let mut title;
-    let mut id;
-    let mut path;
-    let mut tags;
-    let mut links;
+    let (mut title, mut id, mut path, mut tags, mut links);
 
     for entry in input {
         for md_wrapped in get_md_files(entry) {
