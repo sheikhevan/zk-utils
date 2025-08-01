@@ -1,12 +1,10 @@
-use pulldown_cmark::{Options, Parser};
-use serde::{Deserialize, Serialize};
-use serde_yaml::{self};
+use serde::Deserialize;
 use std::{
     fs::File,
     io::{BufRead, BufReader},
 };
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 struct Frontmatter {
     title: Option<String>,
     id: Option<String>,
