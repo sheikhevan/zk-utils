@@ -18,10 +18,13 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    /// Generate a new json file for use in a graph view (like zk-graph)
     Graph {
         #[arg(short, long)]
+        /// The markdown files or folder that contains said files
         input: Vec<String>,
 
+        /// The file you want the outputted json to go to
         #[arg(short, long)]
         output: String,
     },
