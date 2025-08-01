@@ -1,2 +1,2 @@
 # zk-utils
-Evan's utilities for a traiditional zettelkasten with markdown
+Evan's utilities for a managing a traditional zettelkasten 
