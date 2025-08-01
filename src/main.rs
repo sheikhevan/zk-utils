@@ -18,15 +18,21 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    Graph { files: Vec<String> },
+    Graph {
+        #[arg(short, long)]
+        input: Vec<String>,
+
+        #[arg(short, long)]
+        output: String,
+    },
 }
 
 fn main() {
     let args = Cli::parse();
 
     match args.command {
-        Commands::Graph { files } => {
-            utils::graph::print_json(args.verbose, files);
+        Commands::Graph { input, output } => {
+            utils::graph::print_json(args.verbose, input);
         }
     }
 }
