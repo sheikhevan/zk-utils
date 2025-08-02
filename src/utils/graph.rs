@@ -55,6 +55,9 @@ fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
     let (mut title, mut id, mut path, mut tags, mut links);
 
     for entry in input {
+        if verbose {
+            println!("Processing {}", entry);
+        }
         for md_wrapped in get_md_files(entry) {
             if let Ok(md) = md_wrapped {
                 if let Some(frontmatter) = markdown_utils::parse_frontmatter(md.path()) {
