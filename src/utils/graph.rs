@@ -13,9 +13,9 @@ struct GraphData {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Link {
-    raw_link: String,
-    target_id: Option<String>,
+pub struct Link {
+    pub raw_link: String,
+    pub target_id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

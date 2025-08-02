@@ -52,3 +52,5 @@ pub fn parse_frontmatter(path: &Path) -> std::option::Option<Frontmatter> {
 
     return result_with_struct.data;
 }
+
+pub fn get_all_links(path: &Path)
