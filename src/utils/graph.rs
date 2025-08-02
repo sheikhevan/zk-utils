@@ -57,6 +57,8 @@ fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
     for entry in input {
         for md_wrapped in get_md_files(entry) {
             if let Ok(md) = md_wrapped {
+                markdown_utils::parse_frontmatter(md.path());
+
                 title = "placeholder".to_string();
                 id = "001".to_string();
                 path = md.path().to_path_buf();
