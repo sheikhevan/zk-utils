@@ -57,23 +57,23 @@ fn parse_md_files(verbose: bool, input: Vec<String>) -> Vec<MarkdownNode> {
     for entry in input {
         for md_wrapped in get_md_files(entry) {
             if let Ok(md) = md_wrapped {
-                markdown_utils::parse_frontmatter(md.path());
-
-                title = "placeholder".to_string();
-                id = "001".to_string();
-                path = md.path().to_path_buf();
-                tags = vec!["tag1".to_string()];
-                links = vec![];
-                node_vector.push(MarkdownNode {
-                    title,
-                    id,
-                    path,
-                    tags,
-                    links,
-                    group: None,
-                });
+                if let Some(frontmatter) = markdown_utils::parse_frontmatter(md.path()) {
+                    title = frontmatter.title.unwrap();
+                    id = frontmatter.id.unwrap();
+                    path = md.path().to_path_buf();
+                    tags = frontmatter.tags.unwrap();
+                    links = vec![];
+                    node_vector.push(MarkdownNode {
+                        title,
+                        id,
+                        path,
+                        tags,
+                        links,
+                        group: None,
+                    });
+                }
             } else {
-                println!("There was an error getting the markdown files");
+                println!("There was an error accessing the markdown files");
             }
         }
     }
