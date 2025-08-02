@@ -6,6 +6,8 @@ use std::{
     path::Path,
 };
 
+use crate::utils::graph::Link;
+
 #[derive(Deserialize, Debug)]
 pub struct Frontmatter {
     pub title: Option<String>,
@@ -15,7 +17,6 @@ pub struct Frontmatter {
 
 pub fn parse_frontmatter(path: &Path) -> std::option::Option<Frontmatter> {
     use gray_matter::engine::YAML;
-    println!("{:?}", path);
     let mut contents = String::new();
     let mut file = match File::open(path) {
         Ok(file) => file,
@@ -53,4 +54,28 @@ pub fn parse_frontmatter(path: &Path) -> std::option::Option<Frontmatter> {
     return result_with_struct.data;
 }
 
-pub fn get_all_links(path: &Path)
+pub fn get_all_links(path: &Path) -> std::option::Option<Vec<Link>> {
+    let mut contents = String::new();
+    let mut file = match File::open(path) {
+        Ok(file) => file,
+        Err(e) => match e.kind() {
+            ErrorKind::NotFound => {
+                eprintln!("Couldn't open {:?}, not found", path);
+                return None;
+            }
+            ErrorKind::PermissionDenied => {
+                eprintln!("Couldn't open {:?}, permission denied", path);
+                return None;
+            }
+            _ => {
+                eprintln!("An error occurred accessing {:?}", path);
+                return None;
+            }
+        },
+    };
+
+    match file.read_to_string(&mut contents) {
+        Ok(_) => {}
+        Err(e) => eprintln!("An error occurred reading {:?}: {}", file, e),
+    }
+}
